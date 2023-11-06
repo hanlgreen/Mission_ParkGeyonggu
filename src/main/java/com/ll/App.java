@@ -31,11 +31,11 @@ public class App {
                 actionWrite();
             } else if (cmd.equals("목록")) {
                 actionList();
-            } else if (cmd.startsWith("삭제?")){
-                 actionRemove(cmd);
-                 }
+            } else if (cmd.startsWith("삭제?")) {
+                actionRemove(cmd);
             }
         }
+    }
 
 
     private void actionWrite() {
@@ -67,9 +67,26 @@ public class App {
     }
 
     private void actionRemove(String cmd) {
-        String idStr = cmd.replace("삭제?id=", "");
-        int id = Integer. parseInt(idStr);
+        String[] cmdBits = cmd.split("\\?", 2);
+        String action = cmdBits[0];
+        String queryString = cmdBits[1];
 
+        String[] queryStringBits = queryString.split("&");
+
+        int id = 0;
+
+        for (int i = 0; i < queryStringBits.length; i++) {
+            String queryParamStr = queryStringBits[i];
+
+            String[] queryParamStrBits = queryParamStr.split("=", 2);
+
+            String paraName = queryParamStrBits[0];
+            String paramValue = queryParamStrBits[1];
+
+            if (paraName.equals("id")) {
+                id = Integer.parseInt(paramValue);
+            }
+        }
         System.out.printf("%d번 명언을 삭제합니다.\n", id);
     }
 }
